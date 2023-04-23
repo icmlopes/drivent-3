@@ -1,0 +1,5 @@
+
+
+const hotelService = { }
+
+export {hotelService}
