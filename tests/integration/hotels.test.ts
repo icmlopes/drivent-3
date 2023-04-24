@@ -62,8 +62,6 @@ describe('GET /hotels', () => {
       });
 
 
-
-
       it('Should responde with status 402 when it is not paid yet', async () => {
         const user = await createUser();
         const token = await generateValidToken(user);
@@ -93,7 +91,6 @@ describe('GET /hotels', () => {
         expect(response.status).toBe(httpStatus.PAYMENT_REQUIRED)
       })
   
-
 
 
       it('should respond with status 200 and hotel data', async () => {
