@@ -77,7 +77,7 @@ async function getHotels(userId:number){
      
 // }
 
-async function getHotelRooms(hotelId: number, userId: number){
+async function getHotelRooms(userId: number, hotelId: number){
 
     await validation(userId)
 
