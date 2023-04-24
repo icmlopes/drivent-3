@@ -109,11 +109,11 @@ describe('GET /hotels', () => {
             expect(response.status).toBe(httpStatus.OK);
             expect(response.body).toEqual(
                 expect.objectContaining([{
-                    id: expect.any(Number),
-                    name: expect.any(String),
-                    image: expect.any(String),
-                    createdAt: expect.any(String),
-                    updatedAt: expect.any(String)
+                    id: hotel.id,
+                    name: hotel.name,
+                    image: hotel.image,
+                    createdAt: hotel.createdAt,
+                    updatedAt: hotel.updatedAt
                 }])
             );
         });
