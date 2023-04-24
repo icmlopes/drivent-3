@@ -4,7 +4,7 @@ import faker from '@faker-js/faker';
 import { TicketStatus } from '@prisma/client';
 import httpStatus from 'http-status';
 import * as jwt from 'jsonwebtoken';
-import { createEnrollmentWithAddress, createUser, createTicketType, createTicket, createPayment, createHotel, createHotelRoom } from '../factories';
+import { createEnrollmentWithAddress, createUser, createTicketType, createTicket, createPayment, createHotel, createHotelRoom, createTicketTypeParams } from '../factories';
 import { cleanDb, generateValidToken } from "../helpers";
 
 beforeAll(async () => {
@@ -82,7 +82,7 @@ describe('GET /hotels', () => {
             const enrollment = await createEnrollmentWithAddress(user)
             const isRemote = true
             const includesHotel = false
-            const ticketType = await createTicketType(isRemote, includesHotel)
+            const ticketType = await createTicketTypeParams(isRemote, includesHotel)
             await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID)
 
             const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
@@ -98,7 +98,7 @@ describe('GET /hotels', () => {
             const enrollment = await createEnrollmentWithAddress(user);
             const isRemote = false
             const includesHotel = true
-            const ticketType = await createTicketType(isRemote, includesHotel)
+            const ticketType = await createTicketTypeParams(isRemote, includesHotel)
             const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
             await createPayment(ticket.id, ticketType.price)
             const hotel = await createHotel()
@@ -184,7 +184,7 @@ describe('GET /hotels/:hotelId', () => {
             const enrollment = await createEnrollmentWithAddress(user)
             const isRemote = true
             const includesHotel = false
-            const ticketType = await createTicketType(isRemote, includesHotel)
+            const ticketType = await createTicketTypeParams(isRemote, includesHotel)
             await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID)
 
             const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
@@ -198,8 +198,9 @@ describe('GET /hotels/:hotelId', () => {
             const user = await createUser();
             const token = await generateValidToken(user);
             const enrollment = await createEnrollmentWithAddress(user);
+            const isRemote = false
             const includesHotel = true
-            const ticketType = await createTicketType(includesHotel)
+            const ticketType = await createTicketTypeParams(isRemote, includesHotel)
             await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
             const hotel = await createHotel()
             const hotelWithRooms = await createHotelRoom(hotel.id)
