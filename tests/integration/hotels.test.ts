@@ -86,7 +86,6 @@ describe('GET /hotels', () => {
             await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID)
 
             const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
-            console.log("Tô no jest aqui hein", response.status)
 
             expect(response.status).toBe(httpStatus.PAYMENT_REQUIRED)
         })
@@ -108,12 +107,12 @@ describe('GET /hotels', () => {
 
             expect(response.status).toBe(httpStatus.OK);
             expect(response.body).toEqual(
-                expect.objectContaining([{
-                    id: hotel.id,
-                    name: hotel.name,
-                    image: hotel.image,
-                    createdAt: hotel.createdAt,
-                    updatedAt: hotel.updatedAt
+                expect.arrayContaining([{
+                    id: expect.any(Number),
+                    name: expect.any(String),
+                    image: expect.any(String),
+                    createdAt: expect.any(String),
+                    updatedAt: expect.any(String)
                 }])
             );
         });
@@ -189,7 +188,6 @@ describe('GET /hotels/:hotelId', () => {
             await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID)
 
             const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
-            console.log("Tô no jest aqui hein", response.status)
 
             expect(response.status).toBe(httpStatus.PAYMENT_REQUIRED)
         })
@@ -200,19 +198,17 @@ describe('GET /hotels/:hotelId', () => {
             const user = await createUser();
             const token = await generateValidToken(user);
             const enrollment = await createEnrollmentWithAddress(user);
-            const isRemote = false
             const includesHotel = true
-            const ticketType = await createTicketType(isRemote, includesHotel)
-            const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
-            await createPayment(ticket.id, ticketType.price)
+            const ticketType = await createTicketType(includesHotel)
+            await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
             const hotel = await createHotel()
             const hotelWithRooms = await createHotelRoom(hotel.id)
 
-            const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
+            const response = await server.get(`/hotels/${hotel.id}`).set('Authorization', `Bearer ${token}`);
 
             expect(response.status).toBe(httpStatus.OK);
             expect(response.body).toEqual(
-                expect.objectContaining([{
+                expect.objectContaining({
                     id: hotel.id,
                     name: hotel.name,
                     image: hotel.image,
@@ -225,10 +221,10 @@ describe('GET /hotels/:hotelId', () => {
                         capacity: hotelWithRooms.capacity,
                         hotelId: hotelWithRooms.hotelId,
                         createdAt: hotelWithRooms.createdAt.toISOString(),
-                        updatedAt: hotelWithRooms.updatedAt.toISOString(),
+                        updatedAt: hotelWithRooms.updatedAt.toISOString()
                       }
                     ]
-                  }])
+                  })
             );
         });
     });

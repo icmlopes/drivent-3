@@ -15,7 +15,6 @@ export async function getAllHotels(req: AuthenticatedRequest, res: Response, nex
         return res.status(httpStatus.OK).send(hotels)
 
     } catch(e){
-        console.log(e.name)
         next(e)
     }
 }
@@ -33,7 +32,6 @@ export async function getHotelRooms(req: AuthenticatedRequest, res: Response, ne
         return res.status(httpStatus.OK).send(rooms)
 
     } catch(e){
-        console.log("Get rooms Controller",e.name)
         next(e)
     }
 }

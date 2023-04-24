@@ -8,14 +8,18 @@ import paymentsRepository from "@/repositories/payments-repository"
 async function validation(userId: number){
     const enrollment = await enrollmentRepository.findWithAddressByUserId(userId)
 
+
     if(!enrollment){
+
         throw notFoundError()
     }
 
     const ticket  = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
-    if (!ticket) {throw notFoundError()}
+    if (!ticket) {
+        throw notFoundError()
+    }
 
-    if(ticket.TicketType.includesHotel === false || ticket.TicketType.isRemote === true){
+    if(ticket.TicketType.includesHotel !== true || ticket.TicketType.isRemote === true){
         throw paymentRequiredError()
     }
         
@@ -77,7 +81,7 @@ async function getHotels(userId:number){
      
 // }
 
-async function getHotelRooms(userId: number, hotelId: number){
+async function getHotelRooms(hotelId: number, userId: number){
 
     await validation(userId)
 
