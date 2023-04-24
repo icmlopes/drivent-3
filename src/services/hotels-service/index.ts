@@ -18,8 +18,8 @@ async function validation(userId: number){
     if(ticket.TicketType.includesHotel === false || ticket.TicketType.isRemote === true){
         throw paymentRequiredError()
     }
-
-    if(ticket.status === "RESERVED"){
+        
+    if(ticket.status !== "PAID"){
         throw paymentRequiredError()
     }
 
