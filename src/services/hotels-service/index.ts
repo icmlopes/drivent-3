@@ -41,7 +41,8 @@ async function getHotels(userId:number){
 
     // console.log('Tô aqui no server, vendo o payment', payment)
     const findHotels = await hotelsRepository.findHotels()
-    if(!findHotels){
+
+    if(findHotels === null){
         throw notFoundError()
     }
 
@@ -49,6 +50,14 @@ async function getHotels(userId:number){
      
 }
 
-const hotelService = { getHotels }
+async function getHotelRooms(hotelId: number){
+
+    const rooms = await hotelsRepository.findHotelRooms(hotelId)
+}
+
+const hotelService = { 
+    getHotels,
+    getHotelRooms
+ }
 
 export  default hotelService

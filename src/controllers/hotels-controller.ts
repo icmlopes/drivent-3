@@ -19,3 +19,17 @@ export async function getAllHotels(req: AuthenticatedRequest, res: Response, nex
         next(e)
     }
 }
+
+export async function getHotelRooms(req: AuthenticatedRequest, res: Response, next: NextFunction){
+
+    const { hotelId } = req.params
+
+    try{
+
+        // const rooms = await hotelServices 
+
+    } catch(e){
+        console.log(e.name)
+        next(e)
+    }
+}
