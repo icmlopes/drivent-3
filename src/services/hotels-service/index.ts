@@ -16,11 +16,7 @@ async function getHotels(userId:number){
     const ticket  = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
     if (!ticket) {throw notFoundError()}
 
-    console.log('Checando se está chegando o ticket aqui', ticket.id)
-
-
     if(ticket.TicketType.includesHotel === false || ticket.TicketType.isRemote === true){
-        console.log("ASlou pra ver se entra" )
         throw paymentRequiredError()
     }
 
@@ -30,7 +26,6 @@ async function getHotels(userId:number){
 
 
     // if(ticket.TicketType.isRemote === true){
-    //     console.log("Teste testando")
     //     throw paymentRequiredError()
     // }
 
@@ -38,8 +33,6 @@ async function getHotels(userId:number){
     // if(!payment){
     //     throw paymentRequiredError()
     // }
-
-    // console.log('Tô aqui no server, vendo o payment', payment)
     const findHotels = await hotelsRepository.findHotels()
 
     if(findHotels === null){
@@ -50,9 +43,32 @@ async function getHotels(userId:number){
      
 }
 
-async function getHotelRooms(hotelId: number){
+async function getHotelRooms(hotelId: number, userId: number){
+
+    const enrollment = await enrollmentRepository.findWithAddressByUserId(userId)
+
+    if(!enrollment){
+        throw notFoundError()
+    }
+
+    const ticket  = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
+    if (!ticket) {throw notFoundError()}
+
+    if(ticket.TicketType.includesHotel === false || ticket.TicketType.isRemote === true){
+        throw paymentRequiredError()
+    }
+
+    if(ticket.status === "RESERVED"){
+        throw paymentRequiredError()
+    }
 
     const rooms = await hotelsRepository.findHotelRooms(hotelId)
+
+    if(!rooms){
+        throw notFoundError()
+    }
+
+    return rooms
 }
 
 const hotelService = { 

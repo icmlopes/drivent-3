@@ -22,14 +22,18 @@ export async function getAllHotels(req: AuthenticatedRequest, res: Response, nex
 
 export async function getHotelRooms(req: AuthenticatedRequest, res: Response, next: NextFunction){
 
-    const { hotelId } = req.params
+    const hotelId = Number(req.params.hotelId)
+    const { userId } = req;
+
 
     try{
 
-        // const rooms = await hotelServices 
+        const rooms = await hotelService.getHotelRooms(hotelId, userId) 
+
+        return res.status(httpStatus.OK).send(rooms)
 
     } catch(e){
-        console.log(e.name)
+        console.log("Get rooms Controller",e.name)
         next(e)
     }
 }
