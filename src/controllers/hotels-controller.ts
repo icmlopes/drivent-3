@@ -15,7 +15,7 @@ export async function getAllHotels(req: AuthenticatedRequest, res: Response, nex
         return res.status(httpStatus.OK).send(hotels)
 
     } catch(e){
-        console.log(e)
+        console.log(e.name)
         next(e)
     }
 }
